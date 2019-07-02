@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1047286773280",
+    "firebase_url": "https://seaprochegue-33961.firebaseio.com",
+    "project_id": "seaprochegue-33961",
+    "storage_bucket": "seaprochegue-33961.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1047286773280:android:a968b01890c0dac3",
+        "android_client_info": {
+          "package_name": "com.project.seaprochegue.seaprochegue"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1047286773280-5sg4sak07drg0m6umo3bibgs09cacrqn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKc-dV4Ulj-AnXzlBZM2X5vHgahsehzOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1047286773280-5sg4sak07drg0m6umo3bibgs09cacrqn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
