@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import com.project.seaprochegue.seaprochegue.models.Group
 import kotlinx.android.synthetic.main.activity_create_group.*
 import kotlinx.android.synthetic.main.activity_register.*
 import java.util.*
@@ -75,6 +76,10 @@ class CreateGroupActivity : AppCompatActivity() {
             }
     }
 
+    companion object {
+        val GROUP_KEY = "GROUP_KEY"
+    }
+
     private fun saveGroupToDatabase(groupImageUrl: String){
         val uid = UUID.randomUUID().toString()
         val ref = FirebaseDatabase.getInstance().getReference("/groups/$uid")
@@ -86,12 +91,9 @@ class CreateGroupActivity : AppCompatActivity() {
         ref.setValue(group)
             .addOnSuccessListener {
                 val intent = Intent(this, GroupActivity::class.java)
+                intent.putExtra(GROUP_KEY, group)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
     }
-}
-
-class Group(val uid: String, val creatorUid: String, val groupImageUrl: String, val groupName: String, val groupDescription: String) {
-    constructor() : this("", "", "", "","")
 }

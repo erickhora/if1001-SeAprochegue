@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import com.project.seaprochegue.seaprochegue.models.User
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_register.*
 import java.util.*
@@ -54,6 +55,10 @@ class RegisterActivity : AppCompatActivity() {
 
             inputProfileImage.alpha = 0f
         }
+    }
+
+    companion object {
+        val USER_KEY = "USER_KEY"
     }
 
     private fun registrar(){
@@ -102,15 +107,10 @@ class RegisterActivity : AppCompatActivity() {
         ref.setValue(user)
             .addOnSuccessListener {
                 val intent = Intent(this, HomeActivity::class.java)
+                intent.putExtra(USER_KEY, user)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
     }
 }
-
-@Parcelize
-class User(val uid: String, val profileImageUrl: String, val name: String, val phone: String) : Parcelable {
-    constructor() : this("", "", "", "")
-}
-
 
