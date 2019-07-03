@@ -43,22 +43,24 @@
             android:layout_marginBottom="10dp" app:layout_constraintBottom_toTopOf="@+id/groupMsg"/>
     <EditText
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/messageBox" android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/colorWhite"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp" android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toStartOf="@+id/btnSend" android:layout_marginRight="8dp"
             android:hint="Diga algo ao seu grupo"
-            app:layout_constraintTop_toBottomOf="@+id/btnJoin" app:layout_constraintVertical_bias="1.0"/>
+            app:layout_constraintTop_toBottomOf="@+id/btnJoin" app:layout_constraintVertical_bias="1.0"
+            android:alpha="1"/>
     <Button
             android:text="Enviar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnSend" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_button"
-            android:textColor="@color/cardview_light_background"
+            android:textColor="@color/colorWhite"
             android:textStyle="bold"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
@@ -73,7 +75,7 @@
                                                   app:layout_constraintEnd_toStartOf="@+id/groupName"
                                                   android:layout_marginEnd="8dp"
                                                   app:civ_border_width="2dp"
-                                                  app:civ_border_color="@color/cardview_dark_background"
+                                                  app:civ_border_color="@color/colorPrimaryDark"
                                                   android:id="@+id/groupCreator" android:layout_marginStart="24dp"/>
     <Button
             android:text="Entrar"
@@ -83,7 +85,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:background="@drawable/rounded_button"
             android:textStyle="bold"
-            android:textColor="@color/cardview_light_background"
+            android:textColor="@color/colorWhite"
             app:layout_constraintStart_toStartOf="@+id/groupDescription"
             app:layout_constraintEnd_toEndOf="@+id/groupDescription"
             app:layout_constraintHorizontal_bias="0.498"

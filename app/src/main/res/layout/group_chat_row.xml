@@ -28,13 +28,5 @@
             android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
             app:layout_constraintVertical_bias="0.38" android:visibility="visible" tools:visibility="visible"
             android:maxWidth="240dp"/>
-    <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp" app:srcCompat="@mipmap/ic_launcher"
-            android:id="@+id/imageView2"
-            app:layout_constraintEnd_toEndOf="@+id/msgCreator"
-            app:layout_constraintTop_toTopOf="@+id/msgCreator"
-            app:layout_constraintBottom_toBottomOf="@+id/msgCreator"
-            app:layout_constraintStart_toStartOf="@+id/msgCreator" android:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

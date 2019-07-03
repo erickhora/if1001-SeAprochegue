@@ -19,10 +19,14 @@ import kotlinx.android.synthetic.main.activity_group.*
 class GroupActivity : AppCompatActivity() {
 
     val group: Group? = null
+
+    val adapter = GroupAdapter<ViewHolder>()
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_group)
+
+        groupMsg.adapter = adapter
 
         fetchUserData()
 
@@ -39,11 +43,8 @@ class GroupActivity : AppCompatActivity() {
         Picasso.get().load(groupHome.groupImageUrl).into(groupImage)
 
 
-
         if(groupHome.creatorUid == uid) {
             btnJoin.visibility = View.GONE
-
-            /*listenForMessages()*/
 
             btnSend.setOnClickListener {
                 performSendMessage()
@@ -80,102 +81,61 @@ class GroupActivity : AppCompatActivity() {
         })
     }
 
-    private fun fetchMessages(){
-        val adapter = GroupAdapter<ViewHolder>()
+    private fun fetchMessages() {
+        val ref = FirebaseDatabase.getInstance().getReference("messages")
 
-        adapter.add(GroupItemChat())
-        adapter.add(GroupItemChat())
-        adapter.add(GroupItemChat())
-        adapter.add(GroupItemChat())
-        adapter.add(GroupItemChat())
-        adapter.add(GroupItemChat())
-        adapter.add(GroupItemChat())
-        adapter.add(GroupItemChat())
-
-        groupMsg.adapter = adapter
-
-//        val ref = FirebaseDatabase.getInstance().getReference("messages")
-//        ref.addListenerForSingleValueEvent(object: ValueEventListener {
-//            override fun onDataChange(p0: DataSnapshot) {
-//                val adapter = GroupAdapter<ViewHolder>()
-//
-//                val group = intent.getParcelableExtra<Group>(HomeActivity.GROUP_KEY)
-//                val creatorId = group.creatorUid
-//                val groupId = group.uid
-//
-//                p0.children.forEach {
-//                    val message = it.getValue(GroupMessage::class.java)
-//                    val fromId = message?.fromId
-//                    if(message != null && fromId == creatorId && message.groupId == groupId) {
-//                        adapter.add(GroupItemChat(message.text, userUri))
-//                    }
-//                }
-//
-//                groupMessages.adapter = adapter
-//            }
-//
-//            override fun onCancelled(p0: DatabaseError) {
-//
-//            }
-//        })
-    }
-
-    /*private fun listenForMessages(){
-        val ref = FirebaseDatabase.getInstance().getReference("/messages")
-        
-        ref.addChildEventListener(object: ChildEventListener {
-            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
-                val groupMessage = p0.getValue(GroupMessage::class.java)
-
-                val fromId = groupMessage?.fromId
-                val group = intent.getParcelableExtra<Group>(HomeActivity.GROUP_KEY)
-                val creatorId = group.creatorUid
-                val groupId = group.uid
-
-                if(groupMessage != null && fromId == creatorId && groupMessage.groupId == groupId ) {
-                   adapter.add(GroupItemChat(groupMessage.text, userUri))
-
-                    if(groupMessage.fromId == FirebaseAuth.getInstance().uid){
-                        adapter.add(GroupItemChat(groupMessage.text, userUri))
-                    } else {
-                        //DESABILITAR BOTÂO DE ENVIAR MENSAGEM.v+
-                    }
-                }
-            }
-            
+        // AQUIIIIIIIIIIIIIIIIIIIIII
+        ref.addChildEventListener(object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError) {
-                
-            }
-
-            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
-
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
             override fun onChildMoved(p0: DataSnapshot, p1: String?) {
-                
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+                val groupMessage = p0.getValue(GroupMessage::class.java)
+
+                val fromId = FirebaseAuth.getInstance().uid
+
+                val groupId = intent.getParcelableExtra<Group>(HomeActivity.GROUP_KEY).uid
+                val creatorUid = intent.getParcelableExtra<Group>(HomeActivity.GROUP_KEY).creatorUid
+
+                if (groupMessage != null && fromId == creatorUid && groupMessage.groupId == groupId) {
+                    adapter.add(GroupItemChat(groupMessage.text, userUri))
+                }
             }
 
             override fun onChildRemoved(p0: DataSnapshot) {
-                
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         })
-    }*/
+    }
 
     private fun performSendMessage(){
-        val text = messageBox.text.toString()
-        if(text == "") return
         val fromId = FirebaseAuth.getInstance().uid
-        val group = intent.getParcelableExtra<Group>(HomeActivity.GROUP_KEY)
-        val groupId = group.uid
 
         if(fromId == null) return
 
-        val ref = FirebaseDatabase.getInstance().getReference("/messages").push()
+        val groupId = intent.getParcelableExtra<Group>(HomeActivity.GROUP_KEY).uid
+
+        val text = messageBox.text.toString()
+        if(text == "") return
+
+        val ref = FirebaseDatabase.getInstance().getReference("messages").push()
 
         val groupMessage = GroupMessage(ref.key!!, text, fromId, groupId)
+
         ref.setValue(groupMessage)
             .addOnSuccessListener {
                 Toast.makeText(this, "Mensagem enviada!", Toast.LENGTH_SHORT).show()
+                messageBox.text.clear()
+                groupMsg.scrollToPosition(adapter.itemCount - 1)
             }
     }
 }
