@@ -4,6 +4,6 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class Group(val uid: String, val creatorUid: String, val groupImageUrl: String, val groupName: String, val groupDescription: String) : Parcelable {
-    constructor() : this("", "", "", "","")
+class Group(val uid: String, val creatorUid: String, val groupImageUrl: String, val groupName: String, val groupDescription: String, val groupMembers: MutableList<String>) : Parcelable {
+    constructor() : this("", "", "", "","", mutableListOf<String>())
 }

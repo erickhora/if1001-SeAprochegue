@@ -86,7 +86,7 @@ class CreateGroupActivity : AppCompatActivity() {
 
         val creatorUid = FirebaseAuth.getInstance().uid.toString()
 
-        val group = Group(uid, creatorUid, groupImageUrl, inputGroupName.text.toString(), inputGroupDescription.text.toString())
+        val group = Group(uid, creatorUid, groupImageUrl, inputGroupName.text.toString(), inputGroupDescription.text.toString(), mutableListOf(creatorUid))
 
         ref.setValue(group)
             .addOnSuccessListener {

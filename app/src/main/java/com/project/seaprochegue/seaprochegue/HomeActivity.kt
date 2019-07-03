@@ -3,28 +3,20 @@ package com.project.seaprochegue.seaprochegue
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.renderscript.Sampler
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
 import com.project.seaprochegue.seaprochegue.models.Group
-import com.project.seaprochegue.seaprochegue.models.GroupItem
-import com.project.seaprochegue.seaprochegue.models.User
+import com.project.seaprochegue.seaprochegue.models.GroupItemHome
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.activity_home.view.*
-import kotlinx.android.synthetic.main.user_row_group.view.*
 
 class HomeActivity : AppCompatActivity() {
 
@@ -105,13 +97,13 @@ class HomeActivity : AppCompatActivity() {
                     val uid = FirebaseAuth.getInstance().uid
                     val group = it.getValue(Group::class.java)
                     if (group != null && group.creatorUid == uid){
-                        adapter.add(GroupItem(group))
+                        adapter.add(GroupItemHome(group))
                     }
                 }
 
                 adapter.setOnItemClickListener { item, view ->
 
-                    val groupItem = item as GroupItem
+                    val groupItem = item as GroupItemHome
 
                     val intent = Intent(view.context, GroupActivity::class.java)
                     intent.putExtra(GROUP_KEY, groupItem.group)
@@ -130,11 +122,11 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.profileMenu -> {
+            /*R.id.profileMenu -> {
                 val intent = Intent(this, EditProfileActivity::class.java)
                 startActivity(intent)
             }
-
+*/
             R.id.logoutMenu -> {
                 FirebaseAuth.getInstance().signOut()
                 val intent = Intent(this, LoginActivity::class.java)

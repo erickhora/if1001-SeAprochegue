@@ -6,11 +6,11 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.user_row_group.view.*
 
-class GroupItem(val group: Group): Item<ViewHolder>(){
+class GroupItemHome(val group: Group): Item<ViewHolder>(){
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.groupRowName.text = group.groupName
+        viewHolder.itemView.groupName.text = group.groupName
 
-        Picasso.get().load(group.groupImageUrl).into(viewHolder.itemView.groupRowImage)
+        Picasso.get().load(group.groupImageUrl).into(viewHolder.itemView.groupImage)
     }
 
     override fun getLayout(): Int {

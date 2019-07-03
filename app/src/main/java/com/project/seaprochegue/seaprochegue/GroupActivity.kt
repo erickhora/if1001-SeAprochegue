@@ -3,22 +3,20 @@ package com.project.seaprochegue.seaprochegue
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.project.seaprochegue.seaprochegue.R.*
 import com.project.seaprochegue.seaprochegue.models.Group
+import com.project.seaprochegue.seaprochegue.models.GroupItemChat
 import com.project.seaprochegue.seaprochegue.models.GroupMessage
-import com.project.seaprochegue.seaprochegue.models.User
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_group.*
-import kotlinx.android.synthetic.main.chat_group_row.view.*
 
 class GroupActivity : AppCompatActivity() {
-    
-    val adapter = GroupAdapter<ViewHolder>()
 
     val group: Group? = null
     
@@ -27,8 +25,8 @@ class GroupActivity : AppCompatActivity() {
         setContentView(layout.activity_group)
 
         fetchUserData()
-        
-        groupMessages.adapter = adapter
+
+        fetchMessages()
 
         val groupHome = intent.getParcelableExtra<Group>(HomeActivity.GROUP_KEY)
 
@@ -36,13 +34,32 @@ class GroupActivity : AppCompatActivity() {
         groupName.text = groupHome.groupName
         groupDescription.text = groupHome.groupDescription
 
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+
         Picasso.get().load(groupHome.groupImageUrl).into(groupImage)
 
-        listenForMessages()
 
-        btnSend.setOnClickListener {
-            performSendMessage()
+
+        if(groupHome.creatorUid == uid) {
+            btnJoin.visibility = View.GONE
+
+            /*listenForMessages()*/
+
+            btnSend.setOnClickListener {
+                performSendMessage()
+            }
+        } else {
+            groupMsg.visibility = View.INVISIBLE
+            messageBox.visibility = View.GONE
+            btnSend.visibility = View.GONE
+
+            btnJoin.setOnClickListener {
+                groupMsg.visibility = View.VISIBLE
+                btnJoin.visibility = View.GONE
+            }
+
         }
+
     }
 
     var userUri = ""
@@ -63,7 +80,47 @@ class GroupActivity : AppCompatActivity() {
         })
     }
 
-    private fun listenForMessages(){
+    private fun fetchMessages(){
+        val adapter = GroupAdapter<ViewHolder>()
+
+        adapter.add(GroupItemChat())
+        adapter.add(GroupItemChat())
+        adapter.add(GroupItemChat())
+        adapter.add(GroupItemChat())
+        adapter.add(GroupItemChat())
+        adapter.add(GroupItemChat())
+        adapter.add(GroupItemChat())
+        adapter.add(GroupItemChat())
+
+        groupMsg.adapter = adapter
+
+//        val ref = FirebaseDatabase.getInstance().getReference("messages")
+//        ref.addListenerForSingleValueEvent(object: ValueEventListener {
+//            override fun onDataChange(p0: DataSnapshot) {
+//                val adapter = GroupAdapter<ViewHolder>()
+//
+//                val group = intent.getParcelableExtra<Group>(HomeActivity.GROUP_KEY)
+//                val creatorId = group.creatorUid
+//                val groupId = group.uid
+//
+//                p0.children.forEach {
+//                    val message = it.getValue(GroupMessage::class.java)
+//                    val fromId = message?.fromId
+//                    if(message != null && fromId == creatorId && message.groupId == groupId) {
+//                        adapter.add(GroupItemChat(message.text, userUri))
+//                    }
+//                }
+//
+//                groupMessages.adapter = adapter
+//            }
+//
+//            override fun onCancelled(p0: DatabaseError) {
+//
+//            }
+//        })
+    }
+
+    /*private fun listenForMessages(){
         val ref = FirebaseDatabase.getInstance().getReference("/messages")
         
         ref.addChildEventListener(object: ChildEventListener {
@@ -76,10 +133,10 @@ class GroupActivity : AppCompatActivity() {
                 val groupId = group.uid
 
                 if(groupMessage != null && fromId == creatorId && groupMessage.groupId == groupId ) {
-                   adapter.add(GroupItems(groupMessage.text, userUri))
+                   adapter.add(GroupItemChat(groupMessage.text, userUri))
 
                     if(groupMessage.fromId == FirebaseAuth.getInstance().uid){
-                        adapter.add(GroupItems(groupMessage.text, userUri))
+                        adapter.add(GroupItemChat(groupMessage.text, userUri))
                     } else {
                         //DESABILITAR BOTÂO DE ENVIAR MENSAGEM.v+
                     }
@@ -102,10 +159,11 @@ class GroupActivity : AppCompatActivity() {
                 
             }
         })
-    }
+    }*/
 
     private fun performSendMessage(){
         val text = messageBox.text.toString()
+        if(text == "") return
         val fromId = FirebaseAuth.getInstance().uid
         val group = intent.getParcelableExtra<Group>(HomeActivity.GROUP_KEY)
         val groupId = group.uid
@@ -117,20 +175,8 @@ class GroupActivity : AppCompatActivity() {
         val groupMessage = GroupMessage(ref.key!!, text, fromId, groupId)
         ref.setValue(groupMessage)
             .addOnSuccessListener {
-
+                Toast.makeText(this, "Mensagem enviada!", Toast.LENGTH_SHORT).show()
             }
     }
 }
-class GroupItems(val text: String, val userUri: String): Item<ViewHolder>(){
-    override fun bind(viewHolder: ViewHolder, position: Int) {
 
-        viewHolder.itemView.msgSent.text = text
-
-        val target = viewHolder.itemView.msgCreator
-        Picasso.get().load(userUri).into(target)
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.chat_group_row
-    }
-}

@@ -8,7 +8,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.project.seaprochegue.seaprochegue.models.Group
-import com.project.seaprochegue.seaprochegue.models.GroupItem
+import com.project.seaprochegue.seaprochegue.models.GroupItemHome
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_search.*
@@ -36,13 +36,13 @@ class SearchActivity : AppCompatActivity() {
                 p0.children.forEach {
                     val group = it.getValue(Group::class.java)
                     if (group != null){
-                        adapter.add(GroupItem(group))
+                        adapter.add(GroupItemHome(group))
                     }
                 }
 
                 adapter.setOnItemClickListener { item, view ->
 
-                    val groupItem = item as GroupItem
+                    val groupItem = item as GroupItemHome
 
                     val intent = Intent(view.context, GroupActivity::class.java)
                     intent.putExtra(GROUP_KEY, groupItem.group)
