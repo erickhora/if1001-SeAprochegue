@@ -19,6 +19,8 @@ import kotlinx.android.synthetic.main.chat_group_row.view.*
 class GroupActivity : AppCompatActivity() {
     
     val adapter = GroupAdapter<ViewHolder>()
+
+    val group: Group? = null
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,9 +71,11 @@ class GroupActivity : AppCompatActivity() {
                 val groupMessage = p0.getValue(GroupMessage::class.java)
 
                 val fromId = groupMessage?.fromId
-                val creatorId = intent.getParcelableExtra<Group>(HomeActivity.GROUP_KEY).creatorUid
+                val group = intent.getParcelableExtra<Group>(HomeActivity.GROUP_KEY)
+                val creatorId = group.creatorUid
+                val groupId = group.uid
 
-                if(groupMessage != null && fromId == creatorId) {
+                if(groupMessage != null && fromId == creatorId && groupMessage.groupId == groupId ) {
                    adapter.add(GroupItems(groupMessage.text, userUri))
 
                     if(groupMessage.fromId == FirebaseAuth.getInstance().uid){

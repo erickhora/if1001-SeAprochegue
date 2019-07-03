@@ -40,7 +40,11 @@ class HomeActivity : AppCompatActivity() {
 
         btnOnCreateGroup.setOnClickListener{
             val intent = Intent(this, CreateGroupActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
+
+        btnOnSearch.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
             startActivity(intent)
         }
     }
@@ -128,11 +132,6 @@ class HomeActivity : AppCompatActivity() {
         when (item?.itemId) {
             R.id.profileMenu -> {
                 val intent = Intent(this, EditProfileActivity::class.java)
-                startActivity(intent)
-            }
-
-            R.id.configMenu -> {
-                val intent = Intent(this, ConfigActivity::class.java)
                 startActivity(intent)
             }
 
