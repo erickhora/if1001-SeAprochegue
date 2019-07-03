@@ -79,5 +79,7 @@
                                                   app:layout_constraintTop_toBottomOf="@+id/groupImage"
                                                   app:layout_constraintEnd_toStartOf="@+id/groupName"
                                                   android:layout_marginEnd="8dp"
+                                                  app:civ_border_width="2dp"
+                                                  app:civ_border_color="@color/cardview_dark_background"
                                                   android:id="@+id/groupCreator" android:layout_marginStart="24dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

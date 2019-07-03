@@ -9,6 +9,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp" tools:srcCompat="@tools:sample/backgrounds/scenic[1]"
             android:id="@+id/groupRowImage"
+            app:civ_border_color="@color/cardview_light_background"
+            app:civ_border_width="2dp"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="16dp" android:layout_marginLeft="16dp" android:layout_marginStart="16dp"
             android:scaleType="centerCrop"/>
