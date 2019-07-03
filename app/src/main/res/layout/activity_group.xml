@@ -89,7 +89,7 @@
             app:layout_constraintStart_toStartOf="@+id/groupDescription"
             app:layout_constraintEnd_toEndOf="@+id/groupDescription"
             app:layout_constraintHorizontal_bias="0.498"
-    />
+            android:visibility="gone"/>
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="377dp"
             android:layout_height="250dp" android:layout_marginTop="8dp"
@@ -98,5 +98,5 @@
             android:layout_marginLeft="8dp" android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
             android:id="@+id/groupMsg" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/messageBox"/>
+            app:layout_constraintBottom_toTopOf="@+id/messageBox" android:visibility="visible"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

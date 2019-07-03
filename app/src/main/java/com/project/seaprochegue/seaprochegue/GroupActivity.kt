@@ -1,5 +1,6 @@
 package com.project.seaprochegue.seaprochegue
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -28,20 +29,17 @@ class GroupActivity : AppCompatActivity() {
 
         groupMsg.adapter = adapter
 
-        fetchUserData()
-
-        fetchMessages()
-
         val groupHome = intent.getParcelableExtra<Group>(HomeActivity.GROUP_KEY)
+
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
 
         supportActionBar?.title = groupHome.groupName
         groupName.text = groupHome.groupName
         groupDescription.text = groupHome.groupDescription
 
-        val uid = FirebaseAuth.getInstance().currentUser?.uid
-
         Picasso.get().load(groupHome.groupImageUrl).into(groupImage)
 
+        fetchUserData()
 
         if(groupHome.creatorUid == uid) {
             btnJoin.visibility = View.GONE
@@ -49,14 +47,19 @@ class GroupActivity : AppCompatActivity() {
             btnSend.setOnClickListener {
                 performSendMessage()
             }
+
+            fetchMessages()
+
         } else {
             groupMsg.visibility = View.INVISIBLE
             messageBox.visibility = View.GONE
             btnSend.visibility = View.GONE
+            btnJoin.visibility = View.VISIBLE
 
             btnJoin.setOnClickListener {
                 groupMsg.visibility = View.VISIBLE
                 btnJoin.visibility = View.GONE
+                listenForMessages()
             }
 
         }
@@ -84,7 +87,6 @@ class GroupActivity : AppCompatActivity() {
     private fun fetchMessages() {
         val ref = FirebaseDatabase.getInstance().getReference("messages")
 
-        // AQUIIIIIIIIIIIIIIIIIIIIII
         ref.addChildEventListener(object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -113,6 +115,30 @@ class GroupActivity : AppCompatActivity() {
 
             override fun onChildRemoved(p0: DataSnapshot) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
+    }
+
+    private fun listenForMessages() {
+        val ref = FirebaseDatabase.getInstance().getReference("messages")
+
+        ref.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                val adapter = GroupAdapter<ViewHolder>()
+
+                p0.children.forEach {
+                    val groupMessage = it.getValue(GroupMessage::class.java)
+                    val groupSelected = intent.getParcelableExtra<Group>(HomeActivity.GROUP_KEY).creatorUid
+
+                    if (groupMessage != null && groupMessage.fromId == groupSelected){
+                        adapter.add(GroupItemChat(groupMessage.text, userUri))
+                    }
+                }
+                groupMsg.adapter = adapter
             }
         })
     }
